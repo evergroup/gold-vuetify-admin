@@ -77,4 +77,8 @@ export default {
   },
   clipboard: '剪切板',
   externalLink: '外部链接',
+  // /jacky/ //
+  users: '用户管理',
+  products: '产品管理',
+  orders: '订单管理',
 };

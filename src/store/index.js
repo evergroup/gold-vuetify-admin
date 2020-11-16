@@ -18,8 +18,14 @@ export default new Vuex.Store({
     syncStorage({}),
   ],
 
-  state: {},
-  mutations: {},
+  state: {
+    loading: false
+  },
+  mutations: {
+    setLoading: (state, loading) => {
+      state.loading = loading
+    }
+  },
   actions: {},
   getters: {},
 });

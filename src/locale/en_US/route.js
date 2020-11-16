@@ -75,4 +75,9 @@ export default {
   },
   clipboard: 'Clipboard',
   externalLink: 'External Link',
+  // /jacky/ //
+  users: 'Users',
+  products: 'Products',
+  orders: 'Orders',
+
 };

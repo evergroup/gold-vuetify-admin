@@ -7,7 +7,7 @@ module.exports = {
     'plugin:vue/essential',
     'plugin:vue/strongly-recommended',
     'plugin:vue/recommended',
-    '@vue/airbnb',
+    // '@vue/airbnb', //用来去掉eslint
   ],
   plugins: [
     'vuetify',

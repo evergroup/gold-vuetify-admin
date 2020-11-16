@@ -90,6 +90,20 @@ export const constantRoutes = [
     component: Layout,
     children: [
       {
+        path: '/guide',
+        component: () => import('@/views/components/Guide'),
+        name: 'Guide',
+        meta: {
+          title: 'route.guide', icon: 'mdi-near-me', noCache: true, affix: true,
+        },
+      },
+    ],
+  },
+  {
+    path: '/',
+    component: Layout,
+    children: [
+      {
         path: '/roadmap',
         component: () => import('@/views/components/Roadmap'),
         name: 'Roadmap',
@@ -99,6 +113,42 @@ export const constantRoutes = [
           noCache: true,
           affix: true,
         },
+      },
+    ],
+  },
+  {
+    path: '/',
+    component: Layout,
+    children: [
+      {
+        path: '/users',
+        component: () => import('@/views/components/User/list.vue'),
+        name: 'Users',
+        meta: { title: 'route.users', icon: 'mdi-palette' },
+      },
+    ],
+  },
+  {
+    path: '/',
+    component: Layout,
+    children: [
+      {
+        path: '/products',
+        component: () => import('@/views/components/Product/list.vue'),
+        name: 'Products',
+        meta: { title: 'route.products', icon: 'mdi-palette' },
+      },
+    ],
+  },
+  {
+    path: '/',
+    component: Layout,
+    children: [
+      {
+        path: '/orders',
+        component: () => import('@/views/components/Order/list.vue'),
+        name: 'Orders',
+        meta: { title: 'route.orders', icon: 'mdi-palette' },
       },
     ],
   },

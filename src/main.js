@@ -13,6 +13,46 @@ import store from './store';
 import './router/permission';
 import './registerServiceWorker';
 
+
+// http
+import axios from 'axios';
+Vue.prototype.$http = axios;
+axios.defaults.baseURL = process.env.API_BASE_URL || 'http://localhost:8848/api/';
+console.log(process.env);
+
+axios.interceptors.request.use(
+  (config) => {
+    store.commit('setLoading', true);
+    const token = localStorage.getItem('jwt');
+    if (token) {
+      config.headers.common['X-Access-Token'] = token;
+    }
+    return config;
+  },
+  (error) => {
+    store.commit('setLoading', false);
+    return Promise.reject(error);
+  }
+);
+
+axios.interceptors.response.use(
+  (response) => {
+    store.commit('setLoading', false);
+    let { data } = response;
+    if (data.status == 401 || response.statusCode == 401) {
+      router.replace({
+        path: '/login',
+        query: { redirect: router.currentRoute.fullPath },
+      });
+    }
+    return data;
+  },
+  (error) => {
+    store.commit('setLoading', false);
+    return Promise.reject(error);
+  }
+);
+
 new Vue({
   router,
   store,
