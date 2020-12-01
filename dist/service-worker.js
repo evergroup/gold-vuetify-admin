@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/vue-vuetify-admin/precache-manifest.41dc13903907166a0da83527766aa719.js"
+  "precache-manifest.4f995a0f933c624909a7eaeed51643a0.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "pg-sales-system"});

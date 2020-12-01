@@ -8,7 +8,7 @@ function resolve(dir) {
 
 module.exports = {
   publicPath: process.env.NODE_ENV === 'production'
-    ? '/vue-vuetify-admin/'
+    ? './' //配置本地引用目录文件,如不配置，默认为`/`
     : '/',
   configureWebpack: {
     // provide the app's title in webpack's name field, so that
