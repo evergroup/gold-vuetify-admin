@@ -51,17 +51,28 @@
                             label="Email"
                           ></v-text-field>
                         </v-col>
-                        <v-col cols="12" sm="6" md="4">
+
+                        <v-col cols="12" sm="6">
                           <v-text-field
-                            v-model="editedItem.gender"
-                            label="Gender"
+                            v-model="editedItem.password"
+                            label="Password"
                           ></v-text-field>
                         </v-col>
-                        <v-col cols="12" sm="6" md="4">
+                        <v-col cols="12" sm="6">
                           <v-text-field
-                            v-model="editedItem.referCode"
-                            label="Referral Code"
+                            v-model="editedItem.password2"
+                            label="Confirm Password"
                           ></v-text-field>
+                        </v-col>
+
+                        <v-col cols="12">
+                          <v-autocomplete
+                            v-model="editedItem.motherId"
+                            :items="desserts"
+                            item-text="username"
+                            item-value="id"
+                            label="上级"
+                          ></v-autocomplete>
                         </v-col>
                       </v-row>
                     </v-container>
@@ -101,6 +112,10 @@
             </v-toolbar>
           </template>
           <template v-slot:item.actions="{ item }">
+            <router-link :to="/users/ + item.id"
+              ><v-icon small class="mr-2"> mdi-plus </v-icon>
+            </router-link>
+
             <v-icon small class="mr-2" @click="editItem(item)">
               mdi-pencil
             </v-icon>
@@ -120,15 +135,19 @@
 import { mapState, mapMutations } from "vuex";
 const headers = [
   {
-    text: "Title",
+    text: "ID",
+    value: "id",
+  },
+  {
+    text: "Username",
     align: "start",
     sortable: false,
-    value: "title",
+    value: "username",
   },
-  { text: "Name", value: "name" },
-  { text: "Price (￥)", value: "price" },
-  { text: "Body", value: "body" },
-  { text: "Description", value: "desc" },
+  { text: "Email", value: "email" },
+  { text: "Phone", value: "phone" },
+  { text: "Gender", value: "gender" },
+  { text: "ReferCode", value: "referCode" },
   { text: "Actions", value: "actions", sortable: false },
 ];
 
@@ -160,7 +179,7 @@ export default {
   },
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? "New Item" : "Edit Item";
+      return this.editedIndex === -1 ? "新增用户" : "编辑用户";
     },
   },
 
@@ -220,16 +239,16 @@ export default {
     },
 
     getUserList() {
-      this.$http.get("/users").then((res) => {
+      this.$http.post("/users/search").then((res) => {
         if (res.status == 200) {
-          this.desserts = res.data;
+          this.desserts = res.result;
         }
       });
     },
     addUser(detail) {
       this.$http.post("/users/addUser", detail).then((res) => {
         if (res.status == 200) {
-          this.desserts.push(res.data);
+          this.getUserList();
         }
       });
     },

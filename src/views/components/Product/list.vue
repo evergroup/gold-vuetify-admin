@@ -33,6 +33,15 @@
                   <v-card-text>
                     <v-container>
                       <v-row>
+                        <v-col cols="12">
+                          <v-file-input
+                            show-size
+                            truncate-length="15"
+                            prepend-icon="mdi-camera"
+                            v-model="editedItem.file"
+                            label="Image"
+                          ></v-file-input>
+                        </v-col>
                         <v-col cols="12" sm="6" md="4">
                           <v-text-field
                             v-model="editedItem.title"
@@ -51,17 +60,17 @@
                             label="Price (￥)"
                           ></v-text-field>
                         </v-col>
-                        <v-col cols="12" sm="6" md="4">
-                          <v-text-field
-                            v-model="editedItem.body"
-                            label="Body"
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="4">
+                        <v-col cols="12">
                           <v-text-field
                             v-model="editedItem.desc"
                             label="Description"
                           ></v-text-field>
+                        </v-col>
+                        <v-col cols="12">
+                          <v-textarea
+                            v-model="editedItem.body"
+                            label="Body"
+                          ></v-textarea>
                         </v-col>
                       </v-row>
                     </v-container>
@@ -100,6 +109,10 @@
               </v-dialog>
             </v-toolbar>
           </template>
+          <template v-slot:item.active="{ item }">
+            <v-icon small v-if="item.active"> mdi-check </v-icon>
+            <v-icon small v-else> mdi-close </v-icon>
+          </template>
           <template v-slot:item.actions="{ item }">
             <v-icon small class="mr-2" @click="editItem(item)">
               mdi-pencil
@@ -120,6 +133,10 @@
 import { mapState, mapMutations } from "vuex";
 const headers = [
   {
+    text: "ID",
+    value: "id",
+  },
+  {
     text: "Title",
     align: "start",
     sortable: false,
@@ -129,6 +146,7 @@ const headers = [
   { text: "Price (￥)", value: "price" },
   { text: "Body", value: "body" },
   { text: "Description", value: "desc" },
+  { text: "Active", value: "active" },
   { text: "Actions", value: "actions", sortable: false },
 ];
 
@@ -160,7 +178,7 @@ export default {
   },
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? "New Item" : "Edit Item";
+      return this.editedIndex === -1 ? "新增产品" : "编辑产品";
     },
   },
 
@@ -189,7 +207,8 @@ export default {
     },
 
     deleteItemConfirm() {
-      this.desserts.splice(this.editedIndex, 1);
+      let detail = { id: this.editedItem.id, active: false };
+      this.editProduct(detail);
       this.closeDelete();
     },
 
@@ -222,14 +241,25 @@ export default {
     getProductList() {
       this.$http.get("/products").then((res) => {
         if (res.status == 200) {
-          this.desserts = res.data;
+          this.desserts = res.result;
         }
       });
     },
-    addProduct(detail) {
+    async addProduct(detail) {
+      if (detail.file) {
+        detail.image = await api.upload(detail.file);
+      }
+
       this.$http.post("/products/add", detail).then((res) => {
         if (res.status == 200) {
-          this.desserts.push(res.data);
+          this.desserts.push(res.result);
+        }
+      });
+    },
+    editProduct(detail) {
+      this.$http.post("/products/edit", detail).then((res) => {
+        if (res.status == 200) {
+          this.getProductList();
         }
       });
     },

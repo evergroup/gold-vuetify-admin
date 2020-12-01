@@ -1,12 +1,12 @@
 {
-  "name": "vue-vuetify-admin",
-  "title": "Vue Vuetify Admin",
+  "name": "pg-sales-system",
+  "title": "PG Sales System",
   "version": "0.3.0",
   "private": true,
-  "description": "Admin template based on Vue and Vuetify",
-  "author": "NelsonEAX <nelsoneax@gmail.com>",
+  "description": "The Sales System for Prime Gold Group",
+  "author": "jacky",
   "scripts": {
-    "serve": "vue-cli-service serve --https",
+    "serve": "vue-cli-service serve --http",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "test:e2e": "vue-cli-service test:e2e",

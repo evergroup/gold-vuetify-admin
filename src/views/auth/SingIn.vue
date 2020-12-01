@@ -4,16 +4,16 @@
       <v-col cols="12" sm="8" md="4" lg="4">
         <v-card class="elevation-5 pa-3">
           <v-card-text>
-            <div class="layout column align-center">
+            <div class="layout column align-center black pb-4">
               <img
-                src="img/icons/android-icon-144x144.png"
-                alt="Vue Vuetify Admin Logo"
-                width="120"
-                height="120"
+                src="img/icons/pg-logo.jpg"
+                alt="PG Logo"
+                width="160"
+                height="146"
               />
-              <h1 class="text-center my-4 primary--text">PG Sales System</h1>
+              <h1 class="text-center mt-1 white--text">PG Sales System</h1>
             </div>
-            <v-form>
+            <v-form class="mt-4">
               <v-text-field
                 v-model="model.email"
                 append-icon="mdi-account"
@@ -38,11 +38,11 @@
             <v-row class="text-center" dense no-gutters>
               <v-col cols="12">
                 <v-btn-toggle>
-                  <v-btn text color="warning" @click="setUserToLogin(0)">
-                    <span>editor</span>
-                  </v-btn>
                   <v-btn text color="warning" @click="setUserToLogin(1)">
-                    <span>admin</span>
+                    <span>Admin</span>
+                  </v-btn>
+                  <v-btn text color="error" @click="setUserToLogin(0)">
+                    <span>Sales</span>
                   </v-btn>
                 </v-btn-toggle>
               </v-col>
@@ -76,6 +76,7 @@
 <script>
 import Localization from "../widget/AppLocalization.vue";
 import { userAdmin, userEditor } from "@/api/mock";
+import { mapState, mapMutations } from "vuex";
 
 export default {
   name: "SingIn",
@@ -83,34 +84,20 @@ export default {
   data: () => ({
     loading: false,
     model: {
-      email: userAdmin.email,
-      password: userAdmin.password,
+      email: "hnggg6@gmail.com",
+      password: "123456",
     },
   }),
   methods: {
     async login() {
-      let payload = {
+      await this.$store.dispatch("LoginByEmail", {
         email: this.model.email,
         password: this.model.password,
-      };
-      this.$http.post("/users/login", payload).then((res) => {
-        console.log(res);
       });
-
-      // await this.$store.dispatch('LoginByEmail', {
-      //   email: this.model.email,
-      //   password: this.model.password,
-      // });
-      // await this.$router.push(this.$route.query.redirect || '/');
+      this.$router.push("/");
     },
     setUserToLogin(id) {
-      if (id) {
-        this.model.email = userAdmin.email;
-        this.model.password = userAdmin.password;
-      } else {
-        this.model.email = userEditor.email;
-        this.model.password = userEditor.password;
-      }
+      console.log("login = ", id);
     },
   },
 };

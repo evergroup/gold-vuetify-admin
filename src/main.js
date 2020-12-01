@@ -10,8 +10,8 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 
-import './router/permission';
 import './registerServiceWorker';
+
 
 
 // http
@@ -23,7 +23,7 @@ console.log(process.env);
 axios.interceptors.request.use(
   (config) => {
     store.commit('setLoading', true);
-    const token = localStorage.getItem('jwt');
+    const token = localStorage.getItem('token');
     if (token) {
       config.headers.common['X-Access-Token'] = token;
     }
@@ -40,10 +40,10 @@ axios.interceptors.response.use(
     store.commit('setLoading', false);
     let { data } = response;
     if (data.status == 401 || response.statusCode == 401) {
-      router.replace({
-        path: '/login',
-        query: { redirect: router.currentRoute.fullPath },
-      });
+      // router.replace({
+      //   path: '/signin',
+      //   query: { redirect: router.currentRoute.fullPath },
+      // });
     }
     return data;
   },
@@ -52,6 +52,10 @@ axios.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+//api
+import api from '@/api';
+window.api = api
 
 new Vue({
   router,

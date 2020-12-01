@@ -13,7 +13,7 @@
               <v-toolbar-title>订单列表</v-toolbar-title>
               <v-divider class="mx-4" inset vertical></v-divider>
               <v-spacer></v-spacer>
-              <v-dialog v-model="dialog" max-width="500px">
+              <v-dialog v-model="dialog" max-width="700px">
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn
                     color="primary"
@@ -31,40 +31,69 @@
                   </v-card-title>
 
                   <v-card-text>
-                    <v-container>
-                      <v-row>
-                        <v-col cols="12" sm="6" md="4">
+                    <table>
+                      <tr>
+                        <th></th>
+                        <th>产品</th>
+                        <th>价格</th>
+                        <th>数量</th>
+                        <th>小计</th>
+                      </tr>
+                      <tr v-for="(p, i) in products" :key="p.id">
+                        <td>
+                          <v-row no-gutters align="center">
+                            <v-btn icon @click="rmProduct(p, i)"
+                              ><v-icon color="red">mdi-close</v-icon></v-btn
+                            >
+                            <img
+                              class="ml-2"
+                              :src="p.image"
+                              width="30"
+                              height="30"
+                              alt=""
+                            />
+                          </v-row>
+                        </td>
+                        <td>{{ p.name }}</td>
+                        <td>{{ p.price }}</td>
+                        <td>
                           <v-text-field
-                            v-model="editedItem.title"
-                            label="Title"
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="4">
-                          <v-text-field
-                            v-model="editedItem.name"
-                            label="Name"
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="4">
-                          <v-text-field
-                            v-model="editedItem.price"
-                            label="Price (￥)"
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="4">
-                          <v-text-field
-                            v-model="editedItem.body"
-                            label="Body"
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="4">
-                          <v-text-field
-                            v-model="editedItem.desc"
-                            label="Description"
-                          ></v-text-field>
-                        </v-col>
-                      </v-row>
-                    </v-container>
+                            style="width: 100px; text-align: center"
+                            class="text-center"
+                            v-model.number="p.count"
+                            append-icon="mdi-plus"
+                            @click:append="increment(p, i)"
+                            prepend-inner-icon="mdi-minus"
+                            @click:prepend-inner="decrement(p, i)"
+                          >
+                          </v-text-field>
+                        </td>
+                        <td>{{ totalPrice(p) }}</td>
+                      </tr>
+                      <tr class="py-2">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><strong>总计:</strong></td>
+                        <td>
+                          <strong>{{ subtotal(products) }}</strong>
+                        </td>
+                      </tr>
+                    </table>
+
+                    <v-autocomplete
+                      v-model="selectedUser"
+                      :items="users"
+                      :loading="isLoading"
+                      :search-input.sync="search"
+                      hide-no-data
+                      hide-selected
+                      item-text="username"
+                      item-value="id"
+                      label="Select Sales User"
+                      prepend-icon="mdi-database-search"
+                      return-object
+                    ></v-autocomplete>
                   </v-card-text>
 
                   <v-card-actions>
@@ -72,8 +101,8 @@
                     <v-btn color="blue darken-1" text @click="close">
                       Cancel
                     </v-btn>
-                    <v-btn color="blue darken-1" text @click="save">
-                      Save
+                    <v-btn color="blue darken-1" text @click="addOrder">
+                      Place Order
                     </v-btn>
                   </v-card-actions>
                 </v-card>
@@ -120,21 +149,24 @@
 import { mapState, mapMutations } from "vuex";
 const headers = [
   {
-    text: "Title",
+    text: "OrderNumber",
     align: "start",
     sortable: false,
-    value: "title",
+    value: "orderNumber",
   },
-  { text: "Name", value: "name" },
-  { text: "Price (￥)", value: "price" },
-  { text: "Body", value: "body" },
-  { text: "Description", value: "desc" },
+  { text: "ID", value: "id" },
+  { text: "Total (￥)", value: "total" },
+
+  { text: "User", value: "userId" },
+  { text: "Status", value: "status" },
   { text: "Actions", value: "actions", sortable: false },
 ];
 
 export default {
   components: {},
-  computed: {},
+  computed: {
+    ...mapState(["user"]),
+  },
   data() {
     return {
       headers,
@@ -156,11 +188,18 @@ export default {
         carbs: 0,
         protein: 0,
       },
+      products: [],
+      orderProducts: [],
+
+      isLoading: false,
+      users: [],
+      selectedUser: null,
+      search: null,
     };
   },
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? "New Item" : "Edit Item";
+      return this.editedIndex === -1 ? "新建订单" : "编辑订单";
     },
   },
 
@@ -171,11 +210,53 @@ export default {
     dialogDelete(val) {
       val || this.closeDelete();
     },
+    search(val) {
+      // Items have already been requested
+      if (this.isLoading) return;
+
+      this.isLoading = true;
+      this.$http
+        .post("users/search", { username: val })
+        .then((res) => {
+          if (res.status == 200) {
+            this.users = res.result;
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => (this.isLoading = false));
+    },
   },
   mounted() {
     this.getOrderList();
+    this.getProductList();
   },
   methods: {
+    ...mapMutations(["showAlert"]),
+    increment(p, i) {
+      p.count = p.count + 1;
+      this.products.splice(i, 1, { ...p });
+    },
+    decrement(p, i) {
+      if (p.count > 0) {
+        p.count = p.count - 1;
+        this.products.splice(i, 1, { ...p });
+      }
+    },
+    totalPrice(p) {
+      let count = p.count || 0;
+      return p.price * count;
+    },
+    subtotal(products) {
+      let t = 0;
+      products.map((p) => {
+        let count = p.count || 0;
+        t += p.price * count;
+      });
+
+      return t;
+    },
     editItem(item) {
       this.editedIndex = this.desserts.indexOf(item);
       this.editedItem = Object.assign({}, item);
@@ -209,27 +290,34 @@ export default {
       });
     },
 
-    save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.desserts[this.editedIndex], this.editedItem);
-      } else {
-        // this.desserts.push(this.editedItem);
-        this.addOrder(this.editedItem);
-      }
-      this.close();
+    addOrder() {
+      let detail = {
+        userId: this.selectedUser && this.selectedUser.id,
+        products: this.products,
+      };
+      this.$http.post("/orders/addOrder", detail).then((res) => {
+        if (res.status == 200) {
+          this.showAlert("Order Added");
+          this.dialog = false;
+        }
+      });
     },
 
     getOrderList() {
       this.$http.get("/orders").then((res) => {
         if (res.status == 200) {
-          this.desserts = res.data;
+          this.desserts = res.result;
         }
       });
     },
-    addOrder(detail) {
-      this.$http.post("/orders/add", detail).then((res) => {
+    rmProduct(p, i) {
+      this.products.splice(i, 1);
+    },
+
+    getProductList() {
+      this.$http.get("/products").then((res) => {
         if (res.status == 200) {
-          this.desserts.push(res.data);
+          this.products = res.result;
         }
       });
     },
@@ -238,4 +326,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+tr {
+  border-bottom: 1px solid #ccc;
+}
+
+th {
+  text-align: left;
+}
+td {
+  padding-right: 10px;
+}
 </style>

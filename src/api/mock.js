@@ -1,15 +1,12 @@
 export * from '@/api/mock_chart';
 
-export const lorem = `Lorem ipsum dolor sit amet, mel at clita quando.
-   Te sit oratio vituperatoribus,
-   nam ad ipsum posidonium mediocritatem, explicari dissentiunt cu mea. Repudiare disputationi
-   vim in, mollis iriure nec cu, alienum argumentum ius ad. Pri eu justo aeque torquatos.`;
+export const lorem = `首金集團旨在利用區塊鏈技術，實現實物黃金的數字化升級，創建一個全新的數字黃金應用生態系統。`;
 
 export const landingInfo = {
-  title: 'Vue Vuetify Admin',
-  email: 'example@mail.com',
-  phone: '+79876543210',
-  adres: 'Yekaterinburg',
+  title: 'PG Sales System',
+  email: 'info@pgtfund.com',
+  phone: '+86 15932182322',
+  adres: '香港北角电气道183号友邦广场25楼2506室',
 };
 
 export const userAdmin = {

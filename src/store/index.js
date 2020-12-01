@@ -1,31 +1,102 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import syncStorage from './plugins/syncStorage';
-import permission from './modules/permission';
+// import syncStorage from './plugins/syncStorage';
+// import permission from './modules/permission';
+import { asyncRoutes, constantRoutes } from '@/router/';
 import settings from './modules/settings';
-import user from './modules/user';
+import api from '@/api';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   modules: {
-    permission,
+    // permission,
     settings,
-    user,
   },
 
   plugins: [
-    syncStorage({}),
+    // syncStorage({}),
   ],
 
+
+
+
   state: {
-    loading: false
+    loading: false,
+    errShow: false,
+    errText: null,
+    user: {
+      roles: ['admin']
+    }
   },
   mutations: {
     setLoading: (state, loading) => {
       state.loading = loading
+    },
+    showAlert: (state, text) => {
+      state.errShow = true
+      state.errText = text
+    },
+    hideAlert: (state) => {
+      state.errShow = false
+      state.errText = null
+    },
+    SET_TOKEN: (state, token) => {
+      state.token = token
+    },
+    SET_USER: (state, user) => {
+      state.user = user
     }
   },
-  actions: {},
-  getters: {},
+  actions: {
+    // Login user
+    LoginByEmail: async ({ commit, dispatch }, payload) => {
+      api.login(payload).then(async res => {
+        if (res.status == 200) {
+          localStorage.setItem("token", res.accessToken.id);
+          await commit('SET_TOKEN', res.accessToken && res.accessToken.id);
+          await commit('SET_USER', res.result);
+          // let detail = { roles: ['admin'], ...res.result }
+          // await dispatch('GenerateRoutes', detail);
+        } else {
+          commit('showAlert', res.message)
+        }
+      })
+    },
+
+    GetUserInfo: async ({ commit, state }) => {
+      console.log('[vuex.user] GetUserInfo');
+      try {
+        const response = await getUserInfo(state.token);
+
+        // Since mockjs does not support custom status codes, it can only be hacked like this
+        if (!response) {
+          throw new Error('Verification failed, please login again.');
+        }
+
+        // Verify returned roles are a non-null array
+        if (response.user.roles && response.user.roles.length === 0) {
+          throw new Error('getInfo: roles must be a non-null array!');
+        }
+
+        commit('SET_USER', response.user);
+      } catch (err) {
+        console.warn('[vuex.user] GetUserInfo', err);
+      }
+    },
+
+    LogOut: async ({ commit }) => {
+      try {
+        console.log('[vuex.user] LogOut');
+        await commit('SET_USER', { logout: true });
+      } catch (err) {
+        console.warn('[vuex.user] LogOut', err);
+      }
+    },
+
+  },
+  getters: {
+    token: state => state.token,
+    permissionRoutes: state => constantRoutes
+  },
 });
