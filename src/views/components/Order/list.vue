@@ -110,17 +110,17 @@
               <v-dialog v-model="dialogDelete" max-width="500px">
                 <v-card>
                   <v-card-title class="headline"
-                    >你确定要删除这个条目吗?</v-card-title
+                    >你确定要认证通过这个订单吗?</v-card-title
                   >
                   <v-card-text
-                    >请注意：我们并不会真正删除，只是对用户隐藏此条目。</v-card-text
+                    >请注意：认证通过后，Sales会得到佣金。</v-card-text
                   >
                   <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="blue darken-1" text @click="closeDelete"
                       >Cancel</v-btn
                     >
-                    <v-btn color="blue darken-1" text @click="deleteItemConfirm"
+                    <v-btn color="blue darken-1" text @click="confirmOrder"
                       >OK</v-btn
                     >
                     <v-spacer></v-spacer>
@@ -298,6 +298,19 @@ export default {
       this.$http.post("/orders/addOrder", detail).then((res) => {
         if (res.status == 200) {
           this.showAlert("Order Added");
+          this.dialog = false;
+        }
+      });
+    },
+
+    confirmOrder() {
+      let orderId = this.editedItem && this.editedItem.id;
+      if (!orderId) {
+        return this.showAlert("Error Params");
+      }
+      this.$http.post("/orders/confirmOrder/" + orderId).then((res) => {
+        if (res.status == 200) {
+          this.showAlert("Order Confirmed");
           this.dialog = false;
         }
       });

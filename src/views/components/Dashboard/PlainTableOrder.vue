@@ -4,17 +4,14 @@
       <template>
         <v-data-table
           :headers="headers"
-          :items="items"
+          :items="orders"
           hide-default-footer
           class="elevation-0 table-striped"
         >
-          <template
-            slot="items"
-            slot-scope="props"
-          >
+          <template slot="items" slot-scope="props">
             <td>{{ props.item.id }}</td>
             <td class="text-left">
-              {{ props.item.product }}
+              {{ props.item.total }}
             </td>
             <td class="text-left">
               {{ props.item.price }}
@@ -38,29 +35,42 @@
 </template>
 
 <script>
-import items from '@/api/mock_order';
-
 export default {
   data: () => ({
+    orders: [],
     headers: [
       {
-        text: '#', align: 'left', sortable: false, value: 'id',
+        text: "OrderNumber",
+        align: "start",
+        sortable: false,
+        value: "orderNumber",
       },
-      { text: 'Product', value: 'deadline' },
-      { text: 'Price', value: 'progress' },
-      { text: 'Status', value: 'status' },
+
+      { text: "Total (￥)", value: "total" },
+
+      { text: "User", value: "userId" },
+      { text: "Status", value: "status" },
     ],
-    items,
     colors: {
-      processing: 'blue',
-      sent: 'red',
-      delivered: 'green',
+      processing: "blue",
+      sent: "red",
+      delivered: "green",
     },
   }),
   methods: {
     getColorByStatus(status) {
       return this.colors[status];
     },
+    getOrderList() {
+      this.$http.get("/orders").then((res) => {
+        if (res.status == 200) {
+          this.orders = res.result;
+        }
+      });
+    },
+  },
+  mounted() {
+    this.getOrderList();
   },
 };
 </script>

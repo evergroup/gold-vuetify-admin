@@ -81,7 +81,11 @@
                     <v-btn color="blue darken-1" text @click="close">
                       Cancel
                     </v-btn>
-                    <v-btn color="blue darken-1" text @click="save">
+                    <v-btn
+                      color="blue darken-1"
+                      text
+                      @click="editProduct(editedItem)"
+                    >
                       Save
                     </v-btn>
                   </v-card-actions>
@@ -108,6 +112,12 @@
                 </v-card>
               </v-dialog>
             </v-toolbar>
+          </template>
+          <template v-slot:item.image="{ item }">
+            <v-avatar size="36">
+              <img v-if="item.image" :src="item.image" />
+              <span v-else>PGT</span>
+            </v-avatar>
           </template>
           <template v-slot:item.active="{ item }">
             <v-icon small v-if="item.active"> mdi-check </v-icon>
@@ -136,6 +146,7 @@ const headers = [
     text: "ID",
     value: "id",
   },
+  { text: "Image", value: "image" },
   {
     text: "Title",
     align: "start",
@@ -144,8 +155,7 @@ const headers = [
   },
   { text: "Name", value: "name" },
   { text: "Price (￥)", value: "price" },
-  { text: "Body", value: "body" },
-  { text: "Description", value: "desc" },
+  { text: "Desc", value: "desc" },
   { text: "Active", value: "active" },
   { text: "Actions", value: "actions", sortable: false },
 ];
@@ -256,9 +266,14 @@ export default {
         }
       });
     },
-    editProduct(detail) {
+    async editProduct(detail) {
+      if (detail.file) {
+        detail.image = await api.upload(detail.file);
+      }
+
       this.$http.post("/products/edit", detail).then((res) => {
         if (res.status == 200) {
+          this.dialog = false;
           this.getProductList();
         }
       });

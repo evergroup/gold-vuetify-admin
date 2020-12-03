@@ -17,7 +17,7 @@ import './registerServiceWorker';
 // http
 import axios from 'axios';
 Vue.prototype.$http = axios;
-axios.defaults.baseURL = process.env.API_BASE_URL || 'http://localhost:8848/api/';
+axios.defaults.baseURL = process.env.NODE_ENV === 'production' ? 'http://pgtfund.net/api/' : 'http://localhost:8848/api/';
 console.log(process.env);
 
 axios.interceptors.request.use(

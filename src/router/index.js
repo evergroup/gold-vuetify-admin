@@ -188,7 +188,7 @@ export const constantRoutes = [
 ];
 
 export default new Router({
-  // mode: 'history', // gh-pages
+  mode: 'history', // gh-pages
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRoutes,
 });

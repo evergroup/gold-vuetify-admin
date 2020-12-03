@@ -4,51 +4,25 @@
       <template>
         <v-data-table
           :headers="headers"
-          :items="projects"
+          :items="products"
           hide-default-footer
           class="elevation-0 table-striped"
         >
-          <template
-            slot="items"
-            slot-scope="props"
-          >
-            <td>
-              <v-avatar size="36px">
-                <img
-                  :src="props.item.avatar"
-                  :alt="props.item.username"
-                >
-              </v-avatar>
-            </td>
-            <td>{{ props.item.name }}</td>
-            <td class="text-left">
-              {{ props.item.deadline }}
-            </td>
-            <td class="text-left">
-              <v-progress-linear
-                :value="props.item.progress"
-                height="5"
-                :color="props.item.color"
-              />
-            </td>
-            <td class="text-right">
-              <v-btn
-                small
-                flat
-                icon
-                color="grey"
-              >
-                <v-icon>edit</v-icon>
-              </v-btn>
-              <v-btn
-                small
-                flat
-                icon
-                color="grey"
-              >
-                <v-icon>delete</v-icon>
-              </v-btn>
-            </td>
+          <template v-slot:item.image="{ item }">
+            <v-avatar v-if="item.image" size="36">
+              <img :src="item.image" />
+            </v-avatar>
+            <v-avatar v-else size="36">
+              <span>PGT</span>
+            </v-avatar>
+          </template>
+          <template v-slot:item.action="{ item }">
+            <v-btn small flat icon color="grey">
+              <v-icon>mdi-pencil</v-icon>
+            </v-btn>
+            <v-btn small flat icon color="grey">
+              <v-icon>mdi-delete</v-icon>
+            </v-btn>
           </template>
         </v-data-table>
       </template>
@@ -58,31 +32,43 @@
 </template>
 
 <script>
-import { Projects } from '@/api/mock_project';
-
+/* eslint-disable */
 export default {
   data: () => ({
+    products: [],
     headers: [
       {
-        text: '#',
-        align: 'center',
+        text: "ID",
+        align: "center",
         sortable: false,
-        value: 'avatar',
+        value: "id",
       },
       {
-        text: 'Name',
-        align: 'left',
-        value: 'name',
+        text: "Title",
+        align: "left",
+        value: "title",
       },
-      { text: 'Deadline', value: 'deadline' },
-      { text: 'Progress', value: 'progress' },
-      { text: 'Action', value: 'action', align: 'right' },
+      {
+        text: "Name",
+        align: "left",
+        value: "name",
+      },
+      { text: "Price", value: "price" },
+      { text: "Image", value: "image" },
+      { text: "Action", value: "action", align: "right" },
     ],
   }),
-  computed: {
-    projects() {
-      return Projects;
+  methods: {
+    getProductList() {
+      this.$http.get("/products").then((res) => {
+        if (res.status == 200) {
+          this.products = res.result;
+        }
+      });
     },
+  },
+  mounted() {
+    this.getProductList();
   },
 };
 </script>
