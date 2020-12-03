@@ -3,7 +3,7 @@
     <v-row justify="center">
       <v-col cols="12" sm="8">
         <v-card>
-          <v-card-title>User Info</v-card-title>
+          <v-card-title>用户信息</v-card-title>
           <v-card-text>
             <v-container>
               <v-row>
@@ -39,18 +39,24 @@
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12">
+                  <p class="text-bold">佣金总计</p>
+                  <p>{{ (userInfo.gain && userInfo.gain.total) || 0 }}</p>
+                </v-col>
+                <v-col cols="12">
                   <p>所有下线</p>
-                  <v-list>
-                    <v-list-item
-                      v-for="child in userInfo.children"
-                      :key="child.id"
-                    >
-                      <v-list-item-avatar></v-list-item-avatar>
-                      <v-list-item-content>
-                        {{ child.username }}
-                      </v-list-item-content>
-                    </v-list-item>
-                  </v-list>
+                  <div v-for="child in userInfo.children" :key="child.id">
+                    <v-row no-gutters>
+                      <v-col cols="12" sm="4">
+                        <strong>用户名：</strong> {{ child.username }}
+                      </v-col>
+                      <v-col cols="12" sm="4">
+                        <strong>电邮：</strong> {{ child.email }}
+                      </v-col>
+                      <v-col cols="12" sm="4">
+                        <strong>电话：</strong> {{ child.phone }}
+                      </v-col>
+                    </v-row>
+                  </div>
                 </v-col>
               </v-row>
             </v-container>

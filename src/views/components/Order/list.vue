@@ -133,7 +133,7 @@
             <v-icon small class="mr-2" @click="editItem(item)">
               mdi-pencil
             </v-icon>
-            <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+            <v-icon small @click="deleteItem(item)"> mdi-check </v-icon>
           </template>
           <template v-slot:no-data>
             <v-btn color="primary"> Reset </v-btn>
@@ -311,7 +311,7 @@ export default {
       this.$http.post("/orders/confirmOrder/" + orderId).then((res) => {
         if (res.status == 200) {
           this.showAlert("Order Confirmed");
-          this.dialog = false;
+          this.dialogDelete = false;
         }
       });
     },
