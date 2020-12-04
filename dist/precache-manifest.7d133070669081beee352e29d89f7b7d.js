@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "275c9b4af7a17b793ba3",
+    "revision": "92a7f306bc42c289fff1",
     "url": "css/app.57685772.css"
   },
   {
@@ -12,7 +12,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "css/chunk-04b44e4f.545f903a.css"
   },
   {
-    "revision": "3a39d0fe5019eeece02a",
+    "revision": "6300468efbeb45ddc5c0",
     "url": "css/chunk-0d55c604.914b928c.css"
   },
   {
@@ -296,12 +296,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "img/tui-editor.30dd0f52.png"
   },
   {
-    "revision": "54f9ff16def5a6f6fb1a070621fba8ed",
+    "revision": "0ae997f8bf5405dd5f050975c187c638",
     "url": "index.html"
   },
   {
-    "revision": "275c9b4af7a17b793ba3",
-    "url": "js/app.ff847a52.js"
+    "revision": "92a7f306bc42c289fff1",
+    "url": "js/app.3e7ba2a6.js"
   },
   {
     "revision": "209d998cc22d1761b5f1",
@@ -320,8 +320,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "js/chunk-08eb2893.f00f3d63.js"
   },
   {
-    "revision": "3a39d0fe5019eeece02a",
-    "url": "js/chunk-0d55c604.682b2c00.js"
+    "revision": "6300468efbeb45ddc5c0",
+    "url": "js/chunk-0d55c604.53c8b75b.js"
   },
   {
     "revision": "1e43e62d2f5610094de6",
