@@ -99,17 +99,17 @@
               <v-dialog v-model="dialogDelete" max-width="500px">
                 <v-card>
                   <v-card-title class="headline"
-                    >你确定要删除这个条目吗?</v-card-title
+                    >你确定要认证通过这个用户吗?</v-card-title
                   >
                   <v-card-text
-                    >请注意：我们并不会真正删除，只是对用户隐藏此条目。</v-card-text
+                    >请注意：实名认证通过后，此用户可以进行销售活动。</v-card-text
                   >
                   <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="blue darken-1" text @click="closeDelete"
                       >Cancel</v-btn
                     >
-                    <v-btn color="blue darken-1" text @click="deleteItemConfirm"
+                    <v-btn color="blue darken-1" text @click="confirmUser"
                       >OK</v-btn
                     >
                     <v-spacer></v-spacer>
@@ -124,8 +124,11 @@
             }}</v-chip>
           </template>
           <template v-slot:item.emailVerified="{ item }">
-            <v-icon small v-if="item.emailVerified"> mdi-check </v-icon>
-            <v-icon small v-else> mdi-close </v-icon>
+            <!-- <v-icon small v-if="item.emailVerified"> mdi-check </v-icon>
+            <v-icon small v-else> mdi-close </v-icon> -->
+            <v-chip small label dark :color="userColor(item.emailVerified)">{{
+              userStatus(item.emailVerified)
+            }}</v-chip>
           </template>
 
           <template v-slot:item.actions="{ item }">
@@ -144,7 +147,14 @@
             >
               mdi-pencil
             </v-icon>
-            <!-- <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon> -->
+            <v-icon
+              :disabled="item.emailVerified"
+              v-if="user.roleId == 1"
+              small
+              @click="deleteItem(item)"
+            >
+              mdi-checkbox-multiple-marked
+            </v-icon>
           </template>
           <template v-slot:no-data>
             <v-btn color="primary"> Reset </v-btn>
@@ -170,9 +180,9 @@ const headers = [
     value: "username",
   },
   { text: "Email", value: "email" },
-  { text: "EmailVerify", value: "emailVerified", align: "center" },
+  { text: "Status", value: "emailVerified", align: "center" },
   { text: "Phone", value: "phone" },
-  { text: "Status", value: "status" },
+  // { text: "Status", value: "status" },
   { text: "ReferCode", value: "referCode" },
   { text: "Actions", value: "actions", sortable: false },
 ];
@@ -222,6 +232,7 @@ export default {
     this.getUserList();
   },
   methods: {
+    ...mapMutations(["showAlert"]),
     userColor(s) {
       if (!s) return "blue";
       if (s == 1) return "success";
@@ -230,7 +241,7 @@ export default {
     },
     userStatus(s) {
       if (!s) return "注册";
-      if (s == 1) return "确认签约";
+      if (s == 1) return "认证通过";
       if (s == 2) return "签约";
       if (s == -1) return "已删除";
     },
@@ -287,6 +298,19 @@ export default {
     addUser(detail) {
       this.$http.post("/users/addUser", detail).then((res) => {
         if (res.status == 200) {
+          this.getUserList();
+        }
+      });
+    },
+    confirmUser() {
+      let userId = this.editedItem && this.editedItem.id;
+      if (!userId) {
+        return this.showAlert("Error Params");
+      }
+      api.confirmUser(userId).then((res) => {
+        if (res.status == 200) {
+          this.showAlert("User Confirmed");
+          this.dialogDelete = false;
           this.getUserList();
         }
       });

@@ -42,8 +42,12 @@ export default {
   login: data => call('users/login', data),
   signup: data => call('users/signup', data),
   getUserInfo: data => call('users/getInfo', data),
+  confirmUser: userId => call('/users/verifyId/' + userId),
 
   changePwd: data => call('/users/changePassword', data),
+
+  getMessages: (page) => call('/messages/search', { page }),
+  delMessage: (id) => call('/messages/del', { id }),
 
 
 }
