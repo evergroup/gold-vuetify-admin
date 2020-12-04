@@ -4,6 +4,7 @@
     origin="center center"
     :nudge-bottom="10"
     transition="scale-transition"
+    :close-on-content-click="false"
   >
     <template v-slot:activator="{ on }">
       <v-btn icon text v-on="on">
@@ -15,25 +16,21 @@
       <v-divider />
       <!--<v-divider inset/>-->
       <!--<v-subheader inset>Files</v-subheader>-->
-      <v-list-item
-        v-for="item in items.concat(items2)"
-        :key="item.title"
-        avatar
-        @click="1"
-      >
+      <v-list-item v-for="item in messages" :key="item.id" avatar @click="1">
         <v-list-item-avatar>
           <v-icon :class="[item.iconClass]">
-            {{ item.icon }}
+            {{ item.icon || "mdi-folder" }}
           </v-icon>
         </v-list-item-avatar>
 
         <v-list-item-content>
           <v-list-item-title>{{ item.title }}</v-list-item-title>
-          <v-list-item-subtitle>{{ item.subtitle }}</v-list-item-subtitle>
+          <v-list-item-subtitle>{{ item.created }}</v-list-item-subtitle>
+          <v-list-item-subtitle>{{ item.body }}</v-list-item-subtitle>
         </v-list-item-content>
 
         <v-list-item-action>
-          <v-btn icon ripple>
+          <v-btn icon ripple @click="delMessage(item.id)">
             <v-icon color="grey lighten-1"> mdi-delete </v-icon>
           </v-btn>
         </v-list-item-action>
@@ -48,6 +45,7 @@
 export default {
   name: "AppNotification",
   data: () => ({
+    messages: [],
     items: [
       {
         icon: "mdi-folder",
@@ -83,5 +81,26 @@ export default {
       },
     ],
   }),
+  methods: {
+    getMessages() {
+      api.getMessages(1).then((res) => {
+        if (res.status == 200) {
+          this.messages = res.result;
+        } else {
+        }
+      });
+    },
+    delMessage(id) {
+      api.delMessage(id).then((res) => {
+        if (res.status == 200) {
+          this.getMessages();
+        } else {
+        }
+      });
+    },
+  },
+  mounted() {
+    this.getMessages();
+  },
 };
 </script>

@@ -46,8 +46,7 @@ export default {
 
   changePwd: data => call('/users/changePassword', data),
 
-  getMessages: (page) => call('/messages/search', { page }),
-  delMessage: (id) => call('/messages/del', { id }),
-
-
+  getMessages: (page) => call('/messages/search?page=' + page),
+  delMessage: (id) => call('/messages/del/' + id),
+  getStats: () => call('/messages/stats', null, 'get'),
 }

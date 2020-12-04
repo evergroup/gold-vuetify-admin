@@ -6,7 +6,7 @@
       color="orange"
       chart="newVisitis"
       :start="0"
-      :end="102400"
+      :end="userCount"
       :duration="2600"
     />
     <panel-group-item
@@ -15,7 +15,7 @@
       color="blue"
       chart="messages"
       :start="0"
-      :end="81212"
+      :end="msgCount"
       :duration="3000"
     />
     <panel-group-item
@@ -24,7 +24,7 @@
       color="blue-grey"
       chart="purchases"
       :start="0"
-      :end="9280"
+      :end="orderCount"
       :duration="3200"
     />
     <panel-group-item
@@ -33,7 +33,7 @@
       color="green"
       chart="shoppings"
       :start="0"
-      :end="13600"
+      :end="productions"
       :duration="3600"
     />
   </v-row>
@@ -46,6 +46,30 @@ export default {
   name: "PanelGroup",
   components: {
     PanelGroupItem,
+  },
+  data() {
+    return {
+      userCount: 0,
+      msgCount: 0,
+      orderCount: 0,
+      productions: 0,
+    };
+  },
+  methods: {
+    getStats() {
+      api.getStats().then((res) => {
+        if (res.status == 200) {
+          let s = res.result;
+          this.userCount = s.userCount;
+          this.msgCount = s.msgCount;
+          this.orderCount = s.orderCount;
+          this.productions = s.productions;
+        }
+      });
+    },
+  },
+  mounted() {
+    this.getStats();
   },
 };
 </script>
