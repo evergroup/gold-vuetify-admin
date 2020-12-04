@@ -22,21 +22,29 @@
             </v-card-title>
             <v-divider></v-divider>
             <v-card-text>
-              <v-text-field
-                v-model="userInfo.oldPwd"
-                type="password"
-                label="旧密码"
-              ></v-text-field>
-              <v-text-field
-                v-model="userInfo.newPwd"
-                type="password"
-                label="新密码"
-              ></v-text-field>
-              <v-text-field
-                v-model="userInfo.newPwd2"
-                type="password"
-                label="确认新密码"
-              ></v-text-field>
+              <v-row>
+                <v-col cols="12" sm="4">
+                  <v-text-field
+                    v-model="userInfo.oldPwd"
+                    type="password"
+                    label="旧密码"
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12" sm="4">
+                  <v-text-field
+                    v-model="userInfo.newPwd"
+                    type="password"
+                    label="新密码"
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12" sm="4">
+                  <v-text-field
+                    v-model="userInfo.newPwd2"
+                    type="password"
+                    label="确认新密码"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
             </v-card-text>
           </v-card>
 

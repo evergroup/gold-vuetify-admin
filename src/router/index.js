@@ -38,7 +38,7 @@ Vue.use(Router);
 export const constantRoutes = [
   {
     path: '/landing',
-    alias: '/land',
+    alias: '/',
     component: () => import('@/views/auth/Landing.vue'),
     hidden: true,
   },
@@ -48,7 +48,6 @@ export const constantRoutes = [
     children: [
       {
         path: '/dashboard',
-        alias: '/',
         component: () => import('@/views/components/Dashboard/index'),
         name: 'Dashboard',
         meta: {
@@ -162,6 +161,12 @@ export const constantRoutes = [
         component: () => import('@/views/components/Order/list.vue'),
         name: 'Orders',
         meta: { title: 'route.orders', icon: 'mdi-palette' },
+      },
+      {
+        path: '/orders/:id',
+        component: () => import('@/views/components/Order/_id.vue'),
+        hidden: true,
+        meta: { title: 'route.orders', icon: 'mdi-near-me', noCache: true, affix: true, },
       },
     ],
   },

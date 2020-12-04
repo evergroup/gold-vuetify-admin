@@ -55,7 +55,14 @@ axios.interceptors.response.use(
 
 //api
 import api from '@/api';
+import moment from 'moment';
 window.api = api
+
+//filter
+Vue.filter('date', function (value) {
+  if (!value) return ''
+  return moment(value).format('yyyy-MM-DD HH:mm')
+})
 
 new Vue({
   router,

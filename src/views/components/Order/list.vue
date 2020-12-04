@@ -133,8 +133,12 @@
             }}</v-chip>
           </template>
           <template v-slot:item.actions="{ item }">
-            <v-icon small class="mr-2" @click="editItem(item)">
-              mdi-pencil
+            <v-icon
+              small
+              class="mr-2"
+              @click="$router.push('/orders/' + item.id)"
+            >
+              mdi-eye
             </v-icon>
             <v-icon
               small

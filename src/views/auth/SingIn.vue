@@ -84,8 +84,8 @@ export default {
   data: () => ({
     loading: false,
     model: {
-      email: "hnggg6@gmail.com",
-      password: "123456",
+      email: "",
+      password: "",
     },
   }),
   methods: {
@@ -96,7 +96,7 @@ export default {
       });
       console.log("result", result);
       if (result) {
-        this.$router.push("/");
+        this.$router.push("/dashboard");
       }
     },
     setUserToLogin(id) {
