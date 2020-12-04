@@ -13,7 +13,11 @@
               <v-toolbar-title>产品列表</v-toolbar-title>
               <v-divider class="mx-4" inset vertical></v-divider>
               <v-spacer></v-spacer>
-              <v-dialog v-model="dialog" max-width="500px">
+              <v-dialog
+                v-model="dialog"
+                max-width="500px"
+                v-if="user.roleId == 1"
+              >
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn
                     color="primary"
@@ -29,7 +33,7 @@
                   <v-card-title>
                     <span class="headline">{{ formTitle }}</span>
                   </v-card-title>
-
+                  <v-divider></v-divider>
                   <v-card-text>
                     <v-container>
                       <v-row>
@@ -37,7 +41,8 @@
                           <v-file-input
                             show-size
                             truncate-length="15"
-                            prepend-icon="mdi-camera"
+                            prepend-icon=""
+                            prepend-inner-icon="mdi-camera"
                             v-model="editedItem.file"
                             label="Image"
                           ></v-file-input>
@@ -114,16 +119,16 @@
             </v-toolbar>
           </template>
           <template v-slot:item.image="{ item }">
-            <v-avatar size="36">
+            <v-avatar class="blue" size="36">
               <img v-if="item.image" :src="item.image" />
-              <span v-else>PGT</span>
+              <span class="white--text" v-else>PGT</span>
             </v-avatar>
           </template>
           <template v-slot:item.active="{ item }">
             <v-icon small v-if="item.active"> mdi-check </v-icon>
             <v-icon small v-else> mdi-close </v-icon>
           </template>
-          <template v-slot:item.actions="{ item }">
+          <template v-if="user.roleId == 1" v-slot:item.actions="{ item }">
             <v-icon small class="mr-2" @click="editItem(item)">
               mdi-pencil
             </v-icon>
@@ -153,10 +158,10 @@ const headers = [
     sortable: false,
     value: "title",
   },
-  { text: "Name", value: "name" },
+  { text: "Name", value: "name", sortable: false },
   { text: "Price (￥)", value: "price" },
-  { text: "Desc", value: "desc" },
-  { text: "Active", value: "active" },
+  { text: "Desc", value: "desc", sortable: false },
+  { text: "Active", value: "active", align: "center", sortable: false },
   { text: "Actions", value: "actions", sortable: false },
 ];
 
@@ -187,6 +192,7 @@ export default {
     };
   },
   computed: {
+    ...mapState(["user"]),
     formTitle() {
       return this.editedIndex === -1 ? "新增产品" : "编辑产品";
     },

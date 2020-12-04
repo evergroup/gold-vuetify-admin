@@ -1,10 +1,7 @@
 <template>
-  <v-row
-    dense
-    class="panel-group"
-  >
+  <v-row dense class="panel-group">
     <panel-group-item
-      title="New Visits"
+      title="All Members"
       icon="mdi-account-multiple"
       color="orange"
       chart="newVisitis"
@@ -23,7 +20,7 @@
     />
     <panel-group-item
       title="Purchases"
-      icon="mdi-currency-usd"
+      icon="mdi-cart"
       color="blue-grey"
       chart="purchases"
       :start="0"
@@ -31,8 +28,8 @@
       :duration="3200"
     />
     <panel-group-item
-      title="Shoppings"
-      icon="mdi-cart"
+      title="Productions"
+      icon="mdi-currency-usd"
       color="green"
       chart="shoppings"
       :start="0"
@@ -43,10 +40,10 @@
 </template>
 
 <script>
-import PanelGroupItem from './PanelGroupItem.vue';
+import PanelGroupItem from "./PanelGroupItem.vue";
 
 export default {
-  name: 'PanelGroup',
+  name: "PanelGroup",
   components: {
     PanelGroupItem,
   },

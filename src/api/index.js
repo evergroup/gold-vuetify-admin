@@ -40,6 +40,10 @@ async function upload(file) {
 export default {
   upload,
   login: data => call('users/login', data),
-  getUserInfo: data => call('users/getInfo', data)
+  signup: data => call('users/signup', data),
+  getUserInfo: data => call('users/getInfo', data),
+
+  changePwd: data => call('/users/changePassword', data),
+
 
 }

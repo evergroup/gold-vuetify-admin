@@ -1,11 +1,10 @@
 <template>
   <div>
-    <github-corner class="github-corner" />
     <v-container class="container--fluid grid-list-md text-center">
       <panel-group @handleSetLineChartData="handleSetLineChartData" />
       <v-row dense>
         <v-col cols="12">
-          <app-widget title="Line Chart">
+          <app-widget title="业绩追踪">
             <v-btn slot="widget-header-action" icon>
               <v-icon>mdi-flare</v-icon>
             </v-btn>
@@ -53,6 +52,9 @@
       <v-row dense>
         <v-col lg="7" sm="12" cols="12">
           <app-widget title="产品" padding-hide>
+            <v-btn slot="widget-header-action" icon link to="/products">
+              <v-icon>mdi-eye</v-icon>
+            </v-btn>
             <plain-table slot="widget-content" />
           </app-widget>
         </v-col>
@@ -77,7 +79,6 @@ import {
 } from "@/api/mock";
 import * as Activity from "@/api/mock_activity";
 
-import GithubCorner from "@/views/components/Dashboard/GithubCorner.vue";
 import PanelGroup from "@/views/components/Dashboard/PanelGroup.vue";
 import OptionChart from "@/views/components/Dashboard/OptionChart.vue";
 import PlainTable from "@/views/components/Dashboard/PlainTable.vue";
@@ -87,7 +88,6 @@ import AppWidget from "@/views/widget/AppWidget.vue";
 export default {
   name: "Dashboard",
   components: {
-    GithubCorner,
     PanelGroup,
     OptionChart,
     PlainTable,

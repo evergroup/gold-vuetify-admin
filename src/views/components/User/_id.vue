@@ -26,18 +26,6 @@
                   ></v-text-field>
                 </v-col>
 
-                <v-col cols="12" sm="6">
-                  <v-text-field
-                    v-model="userInfo.password"
-                    label="Password"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12" sm="6">
-                  <v-text-field
-                    v-model="userInfo.password2"
-                    label="Confirm Password"
-                  ></v-text-field>
-                </v-col>
                 <v-col cols="12">
                   <p class="text-bold">佣金总计</p>
                   <p>{{ (userInfo.gain && userInfo.gain.total) || 0 }}</p>

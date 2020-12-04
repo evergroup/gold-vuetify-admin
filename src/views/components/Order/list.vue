@@ -29,8 +29,22 @@
                   <v-card-title>
                     <span class="headline">{{ formTitle }}</span>
                   </v-card-title>
-
+                  <v-divider></v-divider>
                   <v-card-text>
+                    <v-autocomplete
+                      class="mt-4"
+                      v-model="selectedUser"
+                      :items="users"
+                      :loading="isLoading"
+                      :search-input.sync="search"
+                      hide-no-data
+                      hide-selected
+                      item-text="username"
+                      item-value="id"
+                      label="输入此订单的销售人"
+                      return-object
+                    ></v-autocomplete>
+
                     <table>
                       <tr>
                         <th></th>
@@ -45,21 +59,19 @@
                             <v-btn icon @click="rmProduct(p, i)"
                               ><v-icon color="red">mdi-close</v-icon></v-btn
                             >
-                            <img
-                              class="ml-2"
-                              :src="p.image"
-                              width="30"
-                              height="30"
-                              alt=""
-                            />
+                            <v-avatar class="ml-2 blue" size="32">
+                              <img v-if="p.image" :src="p.image" />
+                              <span class="white--text" v-else>PGT</span>
+                            </v-avatar>
                           </v-row>
                         </td>
-                        <td>{{ p.name }}</td>
+                        <td>{{ p.title }}</td>
                         <td>{{ p.price }}</td>
                         <td>
                           <v-text-field
-                            style="width: 100px; text-align: center"
-                            class="text-center"
+                            style="width: 100px"
+                            hide-details
+                            outlined
                             v-model.number="p.count"
                             append-icon="mdi-plus"
                             @click:append="increment(p, i)"
@@ -70,8 +82,8 @@
                         </td>
                         <td>{{ totalPrice(p) }}</td>
                       </tr>
-                      <tr class="py-2">
-                        <td></td>
+                      <tr>
+                        <td class="py-8"></td>
                         <td></td>
                         <td></td>
                         <td><strong>总计:</strong></td>
@@ -80,20 +92,6 @@
                         </td>
                       </tr>
                     </table>
-
-                    <v-autocomplete
-                      v-model="selectedUser"
-                      :items="users"
-                      :loading="isLoading"
-                      :search-input.sync="search"
-                      hide-no-data
-                      hide-selected
-                      item-text="username"
-                      item-value="id"
-                      label="Select Sales User"
-                      prepend-icon="mdi-database-search"
-                      return-object
-                    ></v-autocomplete>
                   </v-card-text>
 
                   <v-card-actions>
@@ -129,11 +127,22 @@
               </v-dialog>
             </v-toolbar>
           </template>
+          <template v-slot:item.status="{ item }">
+            <v-chip small label dark :color="orderColor(item.status)">{{
+              orderStatus(item.status)
+            }}</v-chip>
+          </template>
           <template v-slot:item.actions="{ item }">
             <v-icon small class="mr-2" @click="editItem(item)">
               mdi-pencil
             </v-icon>
-            <v-icon small @click="deleteItem(item)"> mdi-check </v-icon>
+            <v-icon
+              small
+              :disabled="item.status == 1"
+              @click="deleteItem(item)"
+            >
+              mdi-checkbox-multiple-marked
+            </v-icon>
           </template>
           <template v-slot:no-data>
             <v-btn color="primary"> Reset </v-btn>
@@ -257,6 +266,18 @@ export default {
 
       return t;
     },
+    orderColor(s) {
+      if (!s) return "blue";
+      if (s == 1) return "success";
+      if (s == 2) return "warning";
+      if (s == -1) return "red";
+    },
+    orderStatus(s) {
+      if (!s) return "已提交";
+      if (s == 1) return "已确认";
+      if (s == 2) return "已取消";
+      if (s == -1) return "已删除";
+    },
     editItem(item) {
       this.editedIndex = this.desserts.indexOf(item);
       this.editedItem = Object.assign({}, item);
@@ -299,6 +320,7 @@ export default {
         if (res.status == 200) {
           this.showAlert("Order Added");
           this.dialog = false;
+          this.getOrderList();
         }
       });
     },
@@ -312,6 +334,7 @@ export default {
         if (res.status == 200) {
           this.showAlert("Order Confirmed");
           this.dialogDelete = false;
+          this.getOrderList();
         }
       });
     },

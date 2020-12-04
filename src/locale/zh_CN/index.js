@@ -5,7 +5,7 @@ export default {
   route,
   components,
   toolbar: {
-    appname: '我的应用',
+    appname: '首金网络',
     settings: '设置',
     profile: '资料',
     logout: '退出',
@@ -28,6 +28,7 @@ export default {
     titleUn: '注册',
     singIn: '登录',
     singUp: '注册',
+    username: '用户名',
     email: 'Email',
     password: '密码',
     confirm: '确认',

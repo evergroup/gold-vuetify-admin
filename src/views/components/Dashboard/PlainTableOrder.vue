@@ -8,24 +8,15 @@
           hide-default-footer
           class="elevation-0 table-striped"
         >
-          <template slot="items" slot-scope="props">
-            <td>{{ props.item.id }}</td>
-            <td class="text-left">
-              {{ props.item.total }}
-            </td>
-            <td class="text-left">
-              {{ props.item.price }}
-            </td>
-            <td class="text-left">
-              <v-chip
-                label
-                small
-                :color="getColorByStatus(props.item.status)"
-                text-color="white"
-              >
-                {{ props.item.status }}
-              </v-chip>
-            </td>
+          <template v-slot:item.status="{ item }">
+            <v-chip
+              label
+              small
+              :color="orderColor(item.status)"
+              text-color="white"
+            >
+              {{ orderStatus(item.status) }}
+            </v-chip>
           </template>
         </v-data-table>
       </template>
@@ -46,20 +37,24 @@ export default {
         value: "orderNumber",
       },
 
-      { text: "Total (￥)", value: "total" },
+      { text: "Total(￥)", value: "total" },
 
       { text: "User", value: "userId" },
       { text: "Status", value: "status" },
     ],
-    colors: {
-      processing: "blue",
-      sent: "red",
-      delivered: "green",
-    },
   }),
   methods: {
-    getColorByStatus(status) {
-      return this.colors[status];
+    orderColor(s) {
+      if (s == 0) return "blue";
+      if (s == 1) return "success";
+      if (s == 2) return "warning";
+      if (s == -1) return "red";
+    },
+    orderStatus(s) {
+      if (s == 0) return "已下单";
+      if (s == 1) return "已确认";
+      if (s == 2) return "已取消";
+      if (s == -1) return "已删除";
     },
     getOrderList() {
       this.$http.get("/orders").then((res) => {

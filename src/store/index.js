@@ -1,5 +1,9 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import VuexPersistence from 'vuex-persist';
+const vuexLocal = new VuexPersistence({
+  storage: window.localStorage
+})
 // import syncStorage from './plugins/syncStorage';
 // import permission from './modules/permission';
 import { asyncRoutes, constantRoutes } from '@/router/';
@@ -16,6 +20,7 @@ export default new Vuex.Store({
 
   plugins: [
     // syncStorage({}),
+    vuexLocal.plugin
   ],
 
 
@@ -51,17 +56,34 @@ export default new Vuex.Store({
   actions: {
     // Login user
     LoginByEmail: async ({ commit, dispatch }, payload) => {
-      api.login(payload).then(async res => {
-        if (res.status == 200) {
-          localStorage.setItem("token", res.accessToken.id);
-          await commit('SET_TOKEN', res.accessToken && res.accessToken.id);
-          await commit('SET_USER', res.result);
-          // let detail = { roles: ['admin'], ...res.result }
-          // await dispatch('GenerateRoutes', detail);
-        } else {
-          commit('showAlert', res.message)
-        }
-      })
+      let res = await api.login(payload)
+
+      if (res.status == 200) {
+        localStorage.setItem("token", res.accessToken.id);
+        await commit('SET_TOKEN', res.accessToken && res.accessToken.id);
+        await commit('SET_USER', res.result);
+        return true;
+        // let detail = { roles: ['admin'], ...res.result }
+        // await dispatch('GenerateRoutes', detail);
+      } else {
+        commit('showAlert', res.message)
+        return false;
+      }
+    },
+    SignUp: async ({ commit, dispatch }, payload) => {
+      let res = await api.signup(payload)
+
+      if (res.status == 200) {
+        localStorage.setItem("token", res.accessToken.id);
+        await commit('SET_TOKEN', res.accessToken && res.accessToken.id);
+        await commit('SET_USER', res.result);
+        return true;
+        // let detail = { roles: ['admin'], ...res.result }
+        // await dispatch('GenerateRoutes', detail);
+      } else {
+        commit('showAlert', res.message)
+        return false;
+      }
     },
 
     GetUserInfo: async ({ commit, state }) => {

@@ -70,7 +70,7 @@ export default {
       menuitems: [
         {
           icon: "mdi-account",
-          href: "#",
+          href: "/profile",
           title: "toolbar.profile",
           click: (e) => {
             console.log(e);

@@ -9,20 +9,10 @@
           class="elevation-0 table-striped"
         >
           <template v-slot:item.image="{ item }">
-            <v-avatar v-if="item.image" size="36">
-              <img :src="item.image" />
+            <v-avatar class="blue" size="32">
+              <img v-if="item.image" :src="item.image" />
+              <span v-else class="white--text">PGT</span>
             </v-avatar>
-            <v-avatar v-else size="36">
-              <span>PGT</span>
-            </v-avatar>
-          </template>
-          <template v-slot:item.action="{ item }">
-            <v-btn small flat icon color="grey">
-              <v-icon>mdi-pencil</v-icon>
-            </v-btn>
-            <v-btn small flat icon color="grey">
-              <v-icon>mdi-delete</v-icon>
-            </v-btn>
           </template>
         </v-data-table>
       </template>
@@ -43,6 +33,7 @@ export default {
         sortable: false,
         value: "id",
       },
+      { text: "Image", value: "image" },
       {
         text: "Title",
         align: "left",
@@ -54,8 +45,6 @@ export default {
         value: "name",
       },
       { text: "Price", value: "price" },
-      { text: "Image", value: "image" },
-      { text: "Action", value: "action", align: "right" },
     ],
   }),
   methods: {

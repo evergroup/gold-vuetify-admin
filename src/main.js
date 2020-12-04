@@ -40,10 +40,10 @@ axios.interceptors.response.use(
     store.commit('setLoading', false);
     let { data } = response;
     if (data.status == 401 || response.statusCode == 401) {
-      // router.replace({
-      //   path: '/signin',
-      //   query: { redirect: router.currentRoute.fullPath },
-      // });
+      router.replace({
+        path: '/singin',
+        query: { redirect: router.currentRoute.fullPath },
+      });
     }
     return data;
   },

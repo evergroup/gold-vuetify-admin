@@ -90,11 +90,14 @@ export default {
   }),
   methods: {
     async login() {
-      await this.$store.dispatch("LoginByEmail", {
+      let result = await this.$store.dispatch("LoginByEmail", {
         email: this.model.email,
         password: this.model.password,
       });
-      this.$router.push("/");
+      console.log("result", result);
+      if (result) {
+        this.$router.push("/");
+      }
     },
     setUserToLogin(id) {
       console.log("login = ", id);

@@ -132,6 +132,12 @@ export const constantRoutes = [
         hidden: true,
         meta: { title: 'route.users', icon: 'mdi-near-me', noCache: true, affix: true, },
       },
+      {
+        path: '/profile',
+        component: () => import('@/views/components/Profile.vue'),
+        hidden: true,
+        meta: { title: 'route.users', icon: 'mdi-near-me', noCache: true, affix: true, },
+      },
     ],
   },
 

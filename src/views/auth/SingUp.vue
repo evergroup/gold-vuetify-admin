@@ -15,6 +15,14 @@
             </div>
             <v-form class="mt-4">
               <v-text-field
+                v-model="model.username"
+                append-icon="mdi-account"
+                name="username"
+                :label="$t('login.username')"
+                required
+                autocomplete="username"
+              />
+              <v-text-field
                 v-model="model.email"
                 append-icon="mdi-account"
                 name="email"
@@ -58,7 +66,7 @@
             <v-btn color="primary" outlined to="/singin">
               {{ $t("login.singIn") }}
             </v-btn>
-            <v-btn color="primary" :loading="loading" @click="login">
+            <v-btn color="primary" :loading="loading" @click="signup">
               {{ $t("login.singUp") }}
             </v-btn>
           </v-card-actions>
@@ -76,18 +84,17 @@ export default {
   components: { Localization },
   data: () => ({
     loading: false,
-    model: {
-      email: "admin@vvadmin.io",
-      password: "password",
-      confirm: "password",
-    },
+    model: {},
   }),
   methods: {
-    login() {
+    async signup() {
       this.loading = true;
-      setTimeout(() => {
+      let result = await this.$store.dispatch("SignUp", this.model);
+      this.loading = false;
+      console.log("result", result);
+      if (result) {
         this.$router.push("/dashboard");
-      }, 1000);
+      }
     },
   },
 };

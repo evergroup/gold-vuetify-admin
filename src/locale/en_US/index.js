@@ -5,7 +5,7 @@ export default {
   route,
   components,
   toolbar: {
-    appname: 'Application',
+    appname: 'Prime Gold',
     settings: 'Settings',
     profile: 'Profile',
     logout: 'Logout',
@@ -28,6 +28,7 @@ export default {
     titleUn: 'Sing Un Form',
     singIn: 'Sing in',
     singUp: 'Sing up',
+    username: 'Username',
     email: 'Email',
     password: 'Password',
     confirm: 'Confirm',

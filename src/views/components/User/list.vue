@@ -14,7 +14,10 @@
               <v-divider class="mx-4" inset vertical></v-divider>
               <v-spacer></v-spacer>
               <v-dialog v-model="dialog" max-width="500px">
-                <template v-slot:activator="{ on, attrs }">
+                <template
+                  v-if="user.roleId == 1"
+                  v-slot:activator="{ on, attrs }"
+                >
                   <v-btn
                     color="primary"
                     dark
@@ -29,7 +32,7 @@
                   <v-card-title>
                     <span class="headline">{{ formTitle }}</span>
                   </v-card-title>
-
+                  <v-divider></v-divider>
                   <v-card-text>
                     <v-container>
                       <v-row>
@@ -43,10 +46,12 @@
                           <v-text-field
                             v-model="editedItem.phone"
                             label="Phone"
+                            type="phone"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="6" md="4">
                           <v-text-field
+                            type="email"
                             v-model="editedItem.email"
                             label="Email"
                           ></v-text-field>
@@ -56,11 +61,13 @@
                           <v-text-field
                             v-model="editedItem.password"
                             label="Password"
+                            type="password"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="6">
                           <v-text-field
                             v-model="editedItem.password2"
+                            type="password"
                             label="Confirm Password"
                           ></v-text-field>
                         </v-col>
@@ -71,7 +78,7 @@
                             :items="desserts"
                             item-text="username"
                             item-value="id"
-                            label="上级"
+                            label="选择上级，若不填 视为一级代理"
                           ></v-autocomplete>
                         </v-col>
                       </v-row>
@@ -111,15 +118,33 @@
               </v-dialog>
             </v-toolbar>
           </template>
-          <template v-slot:item.actions="{ item }">
-            <router-link :to="/users/ + item.id"
-              ><v-icon small class="mr-2"> mdi-plus </v-icon>
-            </router-link>
+          <template v-slot:item.status="{ item }">
+            <v-chip small label dark :color="userColor(item.status)">{{
+              userStatus(item.status)
+            }}</v-chip>
+          </template>
+          <template v-slot:item.emailVerified="{ item }">
+            <v-icon small v-if="item.emailVerified"> mdi-check </v-icon>
+            <v-icon small v-else> mdi-close </v-icon>
+          </template>
 
-            <v-icon small class="mr-2" @click="editItem(item)">
+          <template v-slot:item.actions="{ item }">
+            <v-icon
+              small
+              class="mr-2"
+              @click="$router.push('/users/' + item.id)"
+            >
+              mdi-eye
+            </v-icon>
+            <v-icon
+              v-if="user.roleId == 1"
+              small
+              class="mr-2"
+              @click="editItem(item)"
+            >
               mdi-pencil
             </v-icon>
-            <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+            <!-- <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon> -->
           </template>
           <template v-slot:no-data>
             <v-btn color="primary"> Reset </v-btn>
@@ -145,8 +170,9 @@ const headers = [
     value: "username",
   },
   { text: "Email", value: "email" },
+  { text: "EmailVerify", value: "emailVerified", align: "center" },
   { text: "Phone", value: "phone" },
-  { text: "Gender", value: "gender" },
+  { text: "Status", value: "status" },
   { text: "ReferCode", value: "referCode" },
   { text: "Actions", value: "actions", sortable: false },
 ];
@@ -178,6 +204,7 @@ export default {
     };
   },
   computed: {
+    ...mapState(["user"]),
     formTitle() {
       return this.editedIndex === -1 ? "新增用户" : "编辑用户";
     },
@@ -195,6 +222,18 @@ export default {
     this.getUserList();
   },
   methods: {
+    userColor(s) {
+      if (!s) return "blue";
+      if (s == 1) return "success";
+      if (s == 2) return "warning";
+      if (s == -1) return "red";
+    },
+    userStatus(s) {
+      if (!s) return "注册";
+      if (s == 1) return "确认签约";
+      if (s == 2) return "签约";
+      if (s == -1) return "已删除";
+    },
     editItem(item) {
       this.editedIndex = this.desserts.indexOf(item);
       this.editedItem = Object.assign({}, item);
