@@ -13,8 +13,7 @@
               {{ info.title }}
             </h1>
             <div class="subheading mb-3 text-center">
-              Powered by
-              <a class="white--text" href="https://www.gowin.hk">GOWIN</a>
+              &gt;&gt;盛世藏金，选择首金&lt;&lt;
             </div>
             <v-btn class="warning lighten-2 mt-5" dark large to="/singin">
               准备开始

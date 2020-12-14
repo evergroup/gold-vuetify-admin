@@ -79,5 +79,6 @@ export default {
   users: 'Users',
   products: 'Products',
   orders: 'Orders',
-
+  giftcards: 'Giftcards',
+  bookings: 'Bookings'
 };

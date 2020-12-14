@@ -194,6 +194,30 @@ export const constantRoutes = [
       },
     ],
   },
+  {
+    path: '/',
+    component: Layout,
+    children: [
+      {
+        path: '/giftcards',
+        component: () => import('@/views/components/Giftcard/list.vue'),
+        name: 'Giftcards',
+        meta: { title: 'route.giftcards', icon: 'mdi-text-subject' },
+      }
+    ],
+  },
+  {
+    path: '/',
+    component: Layout,
+    children: [
+      {
+        path: '/bookings',
+        component: () => import('@/views/components/Booking/list.vue'),
+        name: 'Bookings',
+        meta: { title: 'route.bookings', icon: 'mdi-text-subject' },
+      }
+    ],
+  },
 
   ...authRouter,
 ];

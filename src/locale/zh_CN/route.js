@@ -81,4 +81,6 @@ export default {
   users: '用户管理',
   products: '产品管理',
   orders: '订单管理',
+  giftcards: '黄金礼券管理',
+  bookings: '预约取货管理'
 };

@@ -25,8 +25,8 @@
 
         <v-list-item-content>
           <v-list-item-title>{{ item.title }}</v-list-item-title>
-          <v-list-item-subtitle>{{ item.created }}</v-list-item-subtitle>
-          <v-list-item-subtitle>{{ item.body }}</v-list-item-subtitle>
+          <v-list-item-subtitle>{{ item.created | date }}</v-list-item-subtitle>
+          <div>{{ item.body }}</div>
         </v-list-item-content>
 
         <v-list-item-action>
@@ -36,8 +36,8 @@
         </v-list-item-action>
       </v-list-item>
     </v-list>
-    <v-divider />
-    <v-footer>Show All</v-footer>
+    <!-- <v-divider /> -->
+    <!-- <v-footer>Show All</v-footer> -->
   </v-menu>
 </template>
 
