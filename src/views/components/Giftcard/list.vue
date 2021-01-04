@@ -91,13 +91,13 @@
           </template>
 
           <template v-slot:item.actions="{ item }">
-            <v-icon
+            <!-- <v-icon
               small
               class="mr-2"
               @click="$router.push('/users/' + item.id)"
             >
               mdi-eye
-            </v-icon>
+            </v-icon> -->
             <v-icon
               v-if="user.roleId == 1"
               small

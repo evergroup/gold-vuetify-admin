@@ -13,7 +13,7 @@
               <v-toolbar-title>预约取货列表</v-toolbar-title>
               <v-divider class="mx-4" inset vertical></v-divider>
               <v-spacer></v-spacer>
-              <v-dialog v-model="dialog" max-width="500px">
+              <!-- <v-dialog v-model="dialog" max-width="500px">
                 <template
                   v-if="user.roleId == 1"
                   v-slot:activator="{ on, attrs }"
@@ -71,7 +71,7 @@
                     </v-btn>
                   </v-card-actions>
                 </v-card>
-              </v-dialog>
+              </v-dialog> -->
             </v-toolbar>
           </template>
           <!-- <template v-slot:item.status="{ item }">
@@ -91,20 +91,20 @@
           </template>
 
           <template v-slot:item.actions="{ item }">
-            <v-icon
+            <!-- <v-icon
               small
               class="mr-2"
               @click="$router.push('/users/' + item.id)"
             >
               mdi-eye
-            </v-icon>
+            </v-icon> -->
             <v-icon
-              v-if="user.roleId == 1"
               small
-              class="mr-2"
-              @click="editItem(item)"
+              v-if="user.roleId == 1"
+              :disabled="item.claimed == 1"
+              @click="deleteItem(item)"
             >
-              mdi-pencil
+              mdi-checkbox-multiple-marked
             </v-icon>
           </template>
           <template v-slot:no-data>
@@ -113,6 +113,27 @@
         </v-data-table>
       </v-col>
     </v-row>
+
+    <v-dialog v-model="dialogDelete" max-width="500px">
+      <v-card>
+        <v-card-title class="headline"
+          >你确定这个首金券预约已经兑换了吗?</v-card-title
+        >
+        <v-card-text
+          >请注意：兑换确认后，此预约就完结。</v-card-text
+        >
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" text @click="closeDelete"
+            >Cancel</v-btn
+          >
+          <v-btn color="blue darken-1" text @click="confirmBooking"
+            >OK</v-btn
+          >
+          <v-spacer></v-spacer>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -148,6 +169,7 @@ export default {
       headers,
       desserts: [],
       dialog: false,
+      dialogDelete: false,
       editedIndex: -1,
       editedItem: {
       },
@@ -165,7 +187,10 @@ export default {
   watch: {
     dialog(val) {
       val || this.close();
-    }
+    },
+     dialogDelete(val) {
+      val || this.closeDelete();
+    },
   },
   mounted() {
     this.getBookingList();
@@ -201,6 +226,37 @@ export default {
       });
       }
       this.close();
+    },
+
+    deleteItem(item) {
+      this.editedIndex = this.desserts.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialogDelete = true;
+    },
+
+    deleteItemConfirm() {
+      this.desserts.splice(this.editedIndex, 1);
+      this.closeDelete();
+    },
+    closeDelete() {
+      this.dialogDelete = false;
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+      });
+    },
+    confirmBooking() {
+      let bookId = this.editedItem && this.editedItem.id;
+      if (!bookId) {
+        return this.showAlert("Error Params");
+      }
+      this.$http.post("/pgBookings/confirm/" + bookId).then((res) => {
+        if (res.status == 200) {
+          this.showAlert("预约已兑换");
+          this.dialogDelete = false;
+          this.getBookingList();
+        }
+      });
     },
 
     getBookingList() {
