@@ -101,8 +101,8 @@ export default {
   },
   methods: {
     logout() {
-      this.$store.dispatch("LogOut");
       this.$router.push("/landing");
+      this.$store.dispatch("LogOut");
     },
     toggleSettingsPanel() {
       console.log("this.toggleSettingsPanel()111");

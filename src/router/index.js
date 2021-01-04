@@ -35,206 +35,214 @@ Vue.use(Router);
   }
  */
 
-export const constantRoutes = [
-  {
-    path: '/landing',
-    alias: '/',
-    component: () => import('@/views/auth/Landing.vue'),
-    hidden: true,
-  },
-  {
-    path: '/',
-    component: Layout,
-    children: [
-      {
-        path: '/dashboard',
-        component: () => import('@/views/components/Dashboard/index'),
-        name: 'Dashboard',
-        meta: {
-          title: 'route.dashboard', icon: 'mdi-view-dashboard', noCache: true, affix: true,
-        },
-      },
-    ],
-  },
-  // {
-  //   path: '/',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: '/documentation',
-  //       component: () => import('@/views/components/Documentation'),
-  //       name: 'Documentation',
-  //       meta: {
-  //         title: 'route.documentation', icon: 'mdi-text-subject', noCache: true, affix: true,
-  //       },
-  //     },
-  //   ],
-  // },
-  // {
-  //   path: '/',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: '/guide',
-  //       component: () => import('@/views/components/Guide'),
-  //       name: 'Guide',
-  //       meta: {
-  //         title: 'route.guide', icon: 'mdi-near-me', noCache: true, affix: true,
-  //       },
-  //     },
-  //   ],
-  // },
-  // {
-  //   path: '/',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: '/guide',
-  //       component: () => import('@/views/components/Guide'),
-  //       name: 'Guide',
-  //       meta: {
-  //         title: 'route.guide', icon: 'mdi-near-me', noCache: true, affix: true,
-  //       },
-  //     },
-  //   ],
-  // },
-  // {
-  //   path: '/',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: '/roadmap',
-  //       component: () => import('@/views/components/Roadmap'),
-  //       name: 'Roadmap',
-  //       meta: {
-  //         title: 'route.roadmap',
-  //         icon: 'mdi-timeline-text',
-  //         noCache: true,
-  //         affix: true,
-  //       },
-  //     },
-  //   ],
-  // },
-  {
-    path: '/',
-    component: Layout,
-    children: [
-      {
-        path: '/users',
-        component: () => import('@/views/components/User/list.vue'),
-        name: 'Users',
-        meta: { title: 'route.users', icon: 'mdi-near-me' },
-      },
-      {
-        path: '/users/:id',
-        component: () => import('@/views/components/User/_id.vue'),
+export const constantRoutes = [{
+        path: '/landing',
+        alias: '/',
+        component: () =>
+            import ('@/views/auth/Landing.vue'),
         hidden: true,
-        meta: { title: 'route.users', icon: 'mdi-near-me', noCache: true, affix: true, },
-      },
-      {
-        path: '/profile',
-        component: () => import('@/views/components/Profile.vue'),
-        hidden: true,
-        meta: { title: 'route.users', icon: 'mdi-near-me', noCache: true, affix: true, },
-      },
-    ],
-  },
+    },
+    {
+        path: '/',
+        component: Layout,
+        children: [{
+            path: '/dashboard',
+            component: () =>
+                import ('@/views/components/Dashboard/index'),
+            name: 'Dashboard',
+            meta: {
+                title: 'route.dashboard',
+                icon: 'mdi-view-dashboard',
+                noCache: true,
+                affix: true,
+            },
+        }, ],
+        roles: ['admin', 'editor']
+    },
+    // {
+    //   path: '/',
+    //   component: Layout,
+    //   children: [
+    //     {
+    //       path: '/documentation',
+    //       component: () => import('@/views/components/Documentation'),
+    //       name: 'Documentation',
+    //       meta: {
+    //         title: 'route.documentation', icon: 'mdi-text-subject', noCache: true, affix: true,
+    //       },
+    //     },
+    //   ],
+    // },
+    // {
+    //   path: '/',
+    //   component: Layout,
+    //   children: [
+    //     {
+    //       path: '/guide',
+    //       component: () => import('@/views/components/Guide'),
+    //       name: 'Guide',
+    //       meta: {
+    //         title: 'route.guide', icon: 'mdi-near-me', noCache: true, affix: true,
+    //       },
+    //     },
+    //   ],
+    // },
+    // {
+    //   path: '/',
+    //   component: Layout,
+    //   children: [
+    //     {
+    //       path: '/guide',
+    //       component: () => import('@/views/components/Guide'),
+    //       name: 'Guide',
+    //       meta: {
+    //         title: 'route.guide', icon: 'mdi-near-me', noCache: true, affix: true,
+    //       },
+    //     },
+    //   ],
+    // },
+    // {
+    //   path: '/',
+    //   component: Layout,
+    //   children: [
+    //     {
+    //       path: '/roadmap',
+    //       component: () => import('@/views/components/Roadmap'),
+    //       name: 'Roadmap',
+    //       meta: {
+    //         title: 'route.roadmap',
+    //         icon: 'mdi-timeline-text',
+    //         noCache: true,
+    //         affix: true,
+    //       },
+    //     },
+    //   ],
+    // },
+    {
+        path: '/',
+        component: Layout,
+        children: [{
+                path: '/users',
+                component: () =>
+                    import ('@/views/components/User/list.vue'),
+                name: 'Users',
+                meta: { title: 'route.users', icon: 'mdi-near-me' },
+            },
+            {
+                path: '/users/:id',
+                component: () =>
+                    import ('@/views/components/User/_id.vue'),
+                hidden: true,
+                meta: { title: 'route.users', icon: 'mdi-near-me', noCache: true, affix: true, },
+            },
+            {
+                path: '/profile',
+                component: () =>
+                    import ('@/views/components/Profile.vue'),
+                hidden: true,
+                meta: { title: 'route.users', icon: 'mdi-near-me', noCache: true, affix: true, },
+            },
+        ],
+        roles: ['admin', 'editor']
+    },
 
-  {
-    path: '/',
-    component: Layout,
-    children: [
-      {
-        path: '/products',
-        component: () => import('@/views/components/Product/list.vue'),
-        name: 'Products',
-        meta: { title: 'route.products', icon: 'mdi-text-subject' },
-      }
-    ],
-  },
-  {
-    path: '/',
-    component: Layout,
-    children: [
-      {
-        path: '/orders',
-        component: () => import('@/views/components/Order/list.vue'),
-        name: 'Orders',
-        meta: { title: 'route.orders', icon: 'mdi-palette' },
-      },
-      {
-        path: '/orders/:id',
-        component: () => import('@/views/components/Order/_id.vue'),
-        hidden: true,
-        meta: { title: 'route.orders', icon: 'mdi-near-me', noCache: true, affix: true, },
-      },
-    ],
-  },
-  // {
-  //   path: '/',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: '/theme',
-  //       component: () => import('@/views/components/Theme.vue'),
-  //       name: 'Theme',
-  //       meta: { title: 'route.theme', icon: 'mdi-palette' },
-  //     },
-  //   ],
-  // },
-  {
-    path: '/',
-    component: Layout,
-    children: [
-      {
-        path: '/i18n',
-        component: () => import('@/views/components/I18n.vue'),
-        name: 'I18n',
-        meta: { title: 'route.i18n', icon: 'mdi-translate' },
-      },
-    ],
-  },
-  {
-    path: '/',
-    component: Layout,
-    children: [
-      {
-        path: '/giftcards',
-        component: () => import('@/views/components/Giftcard/list.vue'),
-        name: 'Giftcards',
-        meta: { title: 'route.giftcards', icon: 'mdi-text-subject' },
-      }
-    ],
-  },
-  {
-    path: '/',
-    component: Layout,
-    children: [
-      {
-        path: '/bookings',
-        component: () => import('@/views/components/Booking/list.vue'),
-        name: 'Bookings',
-        meta: { title: 'route.bookings', icon: 'mdi-text-subject' },
-      }
-    ],
-  },
+    {
+        path: '/',
+        component: Layout,
+        children: [{
+            path: '/products',
+            component: () =>
+                import ('@/views/components/Product/list.vue'),
+            name: 'Products',
+            meta: { title: 'route.products', icon: 'mdi-text-subject' },
+        }],
+        roles: ['admin', 'editor']
+    },
+    {
+        path: '/',
+        component: Layout,
+        children: [{
+                path: '/orders',
+                component: () =>
+                    import ('@/views/components/Order/list.vue'),
+                name: 'Orders',
+                meta: { title: 'route.orders', icon: 'mdi-palette' },
+            },
+            {
+                path: '/orders/:id',
+                component: () =>
+                    import ('@/views/components/Order/_id.vue'),
+                hidden: true,
+                meta: { title: 'route.orders', icon: 'mdi-near-me', noCache: true, affix: true, },
+            },
+        ],
+        roles: ['admin', 'editor']
+    },
+    // {
+    //   path: '/',
+    //   component: Layout,
+    //   children: [
+    //     {
+    //       path: '/theme',
+    //       component: () => import('@/views/components/Theme.vue'),
+    //       name: 'Theme',
+    //       meta: { title: 'route.theme', icon: 'mdi-palette' },
+    //     },
+    //   ],
+    // },
+    {
+        path: '/',
+        component: Layout,
+        children: [{
+            path: '/i18n',
+            component: () =>
+                import ('@/views/components/I18n.vue'),
+            name: 'I18n',
+            meta: { title: 'route.i18n', icon: 'mdi-translate' },
+        }, ],
+        roles: ['admin', 'editor']
+    },
+    {
+        path: '/',
+        component: Layout,
+        children: [{
+            path: '/giftcards',
+            component: () =>
+                import ('@/views/components/Giftcard/list.vue'),
+            name: 'Giftcards',
+            meta: { title: 'route.giftcards', icon: 'mdi-text-subject' },
+        }],
+        roles: ['admin']
+    },
+    {
+        path: '/',
+        component: Layout,
+        children: [{
+            path: '/bookings',
+            component: () =>
+                import ('@/views/components/Booking/list.vue'),
+            name: 'Bookings',
+            meta: { title: 'route.bookings', icon: 'mdi-text-subject' },
+        }],
+        roles: ['admin']
+    },
 
-  ...authRouter,
+    ...authRouter,
 ];
 
 export default new Router({
-  mode: 'history', // gh-pages
-  scrollBehavior: () => ({ y: 0 }),
-  routes: constantRoutes,
+    mode: 'history', // gh-pages
+    scrollBehavior: () => ({ y: 0 }),
+    routes: constantRoutes,
 });
 
 export const asyncRoutes = [
-  /** When your routing table is too long, you can split it into small modules */
-  constantRoutes,
-  permissionRouter,
-  vuetifyRouter,
-  ...componentsRouter,
-  nestedRouter,
-  errorsRouter,
-  { path: '*', redirect: '/error/404', hidden: true },
+    /** When your routing table is too long, you can split it into small modules */
+    constantRoutes,
+    permissionRouter,
+    vuetifyRouter,
+    ...componentsRouter,
+    nestedRouter,
+    errorsRouter,
+    { path: '*', redirect: '/error/404', hidden: true },
 ];

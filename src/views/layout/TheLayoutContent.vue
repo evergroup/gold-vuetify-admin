@@ -4,9 +4,9 @@
       name="fade-transform"
       mode="out-in"
     >
-      <keep-alive>
+      <!-- <keep-alive> -->
         <router-view />
-      </keep-alive>
+      <!-- </keep-alive> -->
     </transition>
   </v-content>
 </template>
