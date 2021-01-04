@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "precache-manifest.122cebc883d2acd75cfd21d1698fee14.js"
+  "precache-manifest.08d20de29ecdcee07f9b0962f0303c18.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "pg-sales-system"});
